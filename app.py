@@ -2,9 +2,14 @@ import pickle
 import pandas as pd
 import streamlit as st
 import requests
+from dotenv import load_dotenv
+import os
+
+def configure():
+    load_dotenv()
 
 def fetch_poster(movie_id):
-    url = "https://api.themoviedb.org/3/movie/{}?api_key=3d53c73e9cd077f21af5dc0e84ea983c&language=en-US".format(movie_id)
+    url = "https://api.themoviedb.org/3/movie/{}?api_key={os.getenv('api_key')}&language=en-US".format(movie_id)
     data = requests.get(url)
     data = data.json()
     poster_path = data['poster_path']
@@ -25,7 +30,7 @@ def recommend(movie):
 
 
 #download movies_dict.pkl and similarity.pkl from google drive: https://drive.google.com/drive/folders/1mA3hC6ifX8z-MySU64uMt_Af-x_Du_YU?usp=sharing
-
+configure()
 st.header('Movie Recommendation System')
 movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
